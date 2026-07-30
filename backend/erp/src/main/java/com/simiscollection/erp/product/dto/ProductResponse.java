@@ -8,7 +8,7 @@ public class ProductResponse {
     private String name;
     private String description;
     private BigDecimal price;
-    private Integer stockQuantity;
+
     private Boolean active;
 
     private Long categoryId;
@@ -49,13 +49,7 @@ public class ProductResponse {
         this.price = price;
     }
 
-    public Integer getStockQuantity() {
-        return stockQuantity;
-    }
 
-    public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
 
     public Boolean getActive() {
         return active;

@@ -13,7 +13,7 @@ public class ProductMapper {
         response.setName(product.getName());
         response.setDescription(product.getDescription());
         response.setPrice(product.getPrice());
-        response.setStockQuantity(product.getStockQuantity());
+
         response.setActive(product.getActive());
 
         response.setCategoryId(product.getCategory().getId());

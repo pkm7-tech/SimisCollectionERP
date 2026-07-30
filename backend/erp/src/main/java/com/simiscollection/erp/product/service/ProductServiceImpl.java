@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->
@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() ->

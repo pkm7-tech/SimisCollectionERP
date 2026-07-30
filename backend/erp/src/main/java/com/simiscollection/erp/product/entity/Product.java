@@ -20,8 +20,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private Integer stockQuantity;
+
 
     @Column(nullable = false)
     private Boolean active = true;
@@ -65,13 +64,9 @@ public class Product {
         this.price = price;
     }
 
-    public Integer getStockQuantity() {
-        return stockQuantity;
-    }
 
-    public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
+
+
 
     public Boolean getActive() {
         return active;

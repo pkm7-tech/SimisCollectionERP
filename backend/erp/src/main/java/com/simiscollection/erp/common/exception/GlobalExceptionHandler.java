@@ -1,7 +1,10 @@
 package com.simiscollection.erp.common.exception;
 
 import com.simiscollection.erp.category.exception.CategoryNotFoundException;
+import com.simiscollection.erp.inventory.exception.InventoryAlreadyExistsException;
+import com.simiscollection.erp.inventory.exception.InventoryNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,5 +61,21 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
 
         return response;
+    }
+
+    @ExceptionHandler(InventoryNotFoundException.class)
+    public ResponseEntity<String> handleInventoryNotFoundException(
+            InventoryNotFoundException ex) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InventoryAlreadyExistsException.class)
+    public ResponseEntity<String> handleInventoryAlreadyExistsException(
+            InventoryAlreadyExistsException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
     }
 }
