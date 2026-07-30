@@ -1,5 +1,6 @@
-package com.simiscollection.erp.category.exception;
+package com.simiscollection.erp.common.exception;
 
+import com.simiscollection.erp.category.exception.CategoryNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
