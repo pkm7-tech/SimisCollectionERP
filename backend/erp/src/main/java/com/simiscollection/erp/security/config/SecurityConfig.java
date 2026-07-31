@@ -1,5 +1,6 @@
 package com.simiscollection.erp.security.config;
 
+import com.simiscollection.erp.security.jwt.JwtAuthenticationFilter;
 import com.simiscollection.erp.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,14 +12,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(
+            CustomUserDetailsService customUserDetailsService,
+            JwtAuthenticationFilter jwtAuthenticationFilter) {
+
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -28,7 +35,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
+            AuthenticationConfiguration configuration)
+            throws Exception {
 
         return configuration.getAuthenticationManager();
     }
@@ -38,6 +46,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
+
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
@@ -45,9 +54,37 @@ public class SecurityConfig {
                                 SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
-                        .anyRequest().authenticated()
+
+                .requestMatchers("/api/auth/**").permitAll()
+
+                .requestMatchers("/api/users/**").hasRole("ADMIN")
+
+                .requestMatchers("/api/categories/**").hasRole("ADMIN")
+
+                .requestMatchers("/api/products/**").hasRole("ADMIN")
+
+                .requestMatchers("/api/suppliers/**").hasRole("ADMIN")
+
+                .requestMatchers("/api/purchases/**").hasRole("ADMIN")
+
+                .requestMatchers("/api/customers/**")
+                .hasAnyRole("ADMIN", "STAFF")
+
+                .requestMatchers("/api/inventory/**")
+                .hasAnyRole("ADMIN", "STAFF")
+
+                .requestMatchers("/api/sales/**")
+                .hasAnyRole("ADMIN", "STAFF")
+
+                .requestMatchers("/api/dashboard/**")
+                .hasAnyRole("ADMIN", "STAFF")
+
+                .anyRequest().authenticated()
+        )
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 )
 
                 .httpBasic(Customizer.withDefaults());
