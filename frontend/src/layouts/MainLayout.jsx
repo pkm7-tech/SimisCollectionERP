@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
     AppBar,
     Box,
@@ -25,16 +25,18 @@ import LogoutIcon from "@mui/icons-material/Logout";
 const drawerWidth = 250;
 
 function MainLayout() {
+    const navigate = useNavigate();
 
     const menuItems = [
-        { text: "Dashboard", icon: <DashboardIcon /> },
-        { text: "Categories", icon: <CategoryIcon /> },
-        { text: "Products", icon: <InventoryIcon /> },
-        { text: "Customers", icon: <PeopleIcon /> },
-        { text: "Suppliers", icon: <LocalShippingIcon /> },
-        { text: "Purchases", icon: <ShoppingCartIcon /> },
-        { text: "Sales", icon: <PointOfSaleIcon /> },
-        { text: "Logout", icon: <LogoutIcon /> },
+        { text: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
+        { text: "Categories", path: "/categories", icon: <CategoryIcon /> },
+        { text: "Products", path: "/products", icon: <InventoryIcon /> },
+        { text: "Customers", path: "/customers", icon: <PeopleIcon /> },
+        { text: "Suppliers", path: "/suppliers", icon: <LocalShippingIcon /> },
+        { text: "Purchases", path: "/purchases", icon: <ShoppingCartIcon /> },
+        { text: "Sales", path: "/sales", icon: <PointOfSaleIcon /> },
+        { text: "Users", path: "/users", icon: <PeopleIcon /> },
+        { text: "Logout", path: "/logout", icon: <LogoutIcon /> },
     ];
 
     return (
@@ -84,7 +86,22 @@ function MainLayout() {
                             disablePadding
                         >
 
-                            <ListItemButton>
+                            <ListItemButton
+                                onClick={() => {
+
+                                    if (item.text === "Logout") {
+
+                                        localStorage.clear();
+                                        navigate("/");
+
+                                    } else {
+
+                                        navigate(item.path);
+
+                                    }
+
+                                }}
+                            >
 
                                 <ListItemIcon>
 
