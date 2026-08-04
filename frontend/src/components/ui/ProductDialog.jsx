@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
     Dialog,
@@ -8,95 +7,194 @@ import {
     DialogActions,
     Button,
     TextField,
+    MenuItem,
     Grid,
 } from "@mui/material";
 
-function ProductDialog({ open, onClose, onSave }) {
+import { getCategories } from "../../services/categoryService";
 
-    const [product, setProduct] = useState({
+function ProductDialog({
+                           open,
+                           onClose,
+                           onSave,
+                           product,
+                       }) {
+
+    const [categories, setCategories] = useState([]);
+
+    const [formData, setFormData] = useState({
         name: "",
         description: "",
         price: "",
         categoryId: "",
-        active: true,
     });
 
     useEffect(() => {
-        if (open) {
-            setProduct({
-                name: "",
-                description: "",
-                price: "",
-                categoryId: "",
-                active: true,
-            });
-        }
-    }, [open]);
 
-    const handleChange = (event) => {
-        setProduct({
-            ...product,
-            [event.target.name]: event.target.value,
-        });
+        if (!open) return;
+
+        loadCategories();
+
+        if (product) {
+
+            setFormData({
+
+                name: product.name || "",
+
+                description: product.description || "",
+
+                price: product.price || "",
+
+                categoryId: product.categoryId || "",
+
+            });
+
+        } else {
+
+            setFormData({
+
+                name: "",
+
+                description: "",
+
+                price: "",
+
+                categoryId: "",
+
+            });
+
+        }
+
+    }, [open, product]);
+
+    const loadCategories = async () => {
+
+        try {
+
+            const data = await getCategories();
+
+            setCategories(data);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
     };
 
-    const handleSave = () => {
-        onSave(product);
+    const handleChange = (event) => {
+
+        setFormData({
+
+            ...formData,
+
+            [event.target.name]: event.target.value,
+
+        });
+
+    };
+
+    const handleSubmit = () => {
+
+        if (
+            !formData.name ||
+            !formData.price ||
+            !formData.categoryId
+        ) {
+
+            alert("Please fill all required fields.");
+
+            return;
+
+        }
+
+        onSave(formData);
+
     };
 
     return (
+
         <Dialog
             open={open}
             onClose={onClose}
             fullWidth
             maxWidth="sm"
         >
-            <DialogTitle>Add Product</DialogTitle>
+
+            <DialogTitle>
+
+                {product ? "Edit Product" : "Add Product"}
+
+            </DialogTitle>
 
             <DialogContent>
 
                 <Grid container spacing={2} sx={{ mt: 1 }}>
 
-                    <Grid size={12}>
+                    <Grid item xs={12}>
+
                         <TextField
                             fullWidth
                             label="Product Name"
                             name="name"
-                            value={product.name}
+                            value={formData.name}
                             onChange={handleChange}
                         />
+
                     </Grid>
 
-                    <Grid size={12}>
+                    <Grid item xs={12}>
+
                         <TextField
                             fullWidth
                             label="Description"
                             name="description"
-                            value={product.description}
+                            value={formData.description}
                             onChange={handleChange}
                         />
+
                     </Grid>
 
-                    <Grid size={6}>
+                    <Grid item xs={6}>
+
                         <TextField
                             fullWidth
                             type="number"
                             label="Price"
                             name="price"
-                            value={product.price}
+                            value={formData.price}
                             onChange={handleChange}
                         />
+
                     </Grid>
 
-                    <Grid size={6}>
+                    <Grid item xs={6}>
+
                         <TextField
+                            select
                             fullWidth
-                            type="number"
-                            label="Category ID"
+                            label="Category"
                             name="categoryId"
-                            value={product.categoryId}
+                            value={formData.categoryId}
                             onChange={handleChange}
-                        />
+                        >
+
+                            {categories.map((category) => (
+
+                                <MenuItem
+                                    key={category.id}
+                                    value={category.id}
+                                >
+
+                                    {category.name}
+
+                                </MenuItem>
+
+                            ))}
+
+                        </TextField>
+
                     </Grid>
 
                 </Grid>
@@ -106,20 +204,26 @@ function ProductDialog({ open, onClose, onSave }) {
             <DialogActions>
 
                 <Button onClick={onClose}>
+
                     Cancel
+
                 </Button>
 
                 <Button
                     variant="contained"
-                    onClick={handleSave}
+                    onClick={handleSubmit}
                 >
-                    Save
+
+                    {product ? "Update" : "Save"}
+
                 </Button>
 
             </DialogActions>
 
         </Dialog>
+
     );
+
 }
 
 export default ProductDialog;

@@ -1,5 +1,5 @@
 package com.simiscollection.erp.common.exception;
-
+import org.springframework.dao.DataIntegrityViolationException;
 import com.simiscollection.erp.category.exception.CategoryNotFoundException;
 import com.simiscollection.erp.inventory.exception.InventoryAlreadyExistsException;
 import com.simiscollection.erp.inventory.exception.InventoryNotFoundException;
@@ -50,6 +50,22 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+        response.put("message",
+                "Cannot delete product because it exists in inventory.");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
     @ExceptionHandler(Exception.class)
     public Map<String, Object> handleGeneralException(Exception ex) {
 

@@ -5,24 +5,50 @@ import {
     Paper,
     Button,
     Box,
+    Snackbar,
+    Alert,
+    IconButton,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
 } from "@mui/material";
 
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import { DataGrid } from "@mui/x-data-grid";
+
+import ProductDialog from "../../components/ui/ProductDialog";
 
 import {
     getProducts,
     createProduct,
+    updateProduct,
+    deleteProduct,
 } from "../../services/productService";
-
-import ProductDialog from "../../components/ui/ProductDialog";
 
 function ProductPage() {
 
     const [products, setProducts] = useState([]);
+
     const [openDialog, setOpenDialog] = useState(false);
 
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const [deleteDialog, setDeleteDialog] = useState(false);
+
+    const [productToDelete, setProductToDelete] = useState(null);
+
+    const [success, setSuccess] = useState(false);
+
+    const [message, setMessage] = useState("");
+
     useEffect(() => {
+
         loadProducts();
+
     }, []);
 
     const loadProducts = async () => {
@@ -37,7 +63,25 @@ function ProductPage() {
 
             console.error(error);
 
+            alert("Unable to load products.");
+
         }
+
+    };
+
+    const handleAdd = () => {
+
+        setSelectedProduct(null);
+
+        setOpenDialog(true);
+
+    };
+
+    const handleEdit = (product) => {
+
+        setSelectedProduct(product);
+
+        setOpenDialog(true);
 
     };
 
@@ -45,13 +89,43 @@ function ProductPage() {
 
         try {
 
-            await createProduct(product);
+            const request = {
+
+                name: product.name,
+
+                description: product.description,
+
+                price: Number(product.price),
+
+                categoryId: Number(product.categoryId),
+
+            };
+
+            if (selectedProduct) {
+
+                await updateProduct(selectedProduct.id, request);
+
+                setMessage("Product updated successfully!");
+
+            }
+
+            else {
+
+                await createProduct(request);
+
+                setMessage("Product saved successfully!");
+
+            }
 
             setOpenDialog(false);
 
+            setSuccess(true);
+
             loadProducts();
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
 
@@ -61,6 +135,43 @@ function ProductPage() {
 
     };
 
+    const handleDeleteClick = (product) => {
+
+        setProductToDelete(product);
+
+        setDeleteDialog(true);
+
+    };
+
+    const confirmDelete = async () => {
+
+        try {
+
+            await deleteProduct(productToDelete.id);
+
+            setDeleteDialog(false);
+
+            setMessage("Product deleted successfully!");
+
+            setSuccess(true);
+
+            loadProducts();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            const message =
+                error.response?.data?.message ||
+                "Unable to delete product.";
+
+            alert(message);
+
+        }
+
+    };
     const columns = [
 
         {
@@ -97,15 +208,45 @@ function ProductPage() {
             field: "active",
             headerName: "Status",
             width: 120,
-            valueGetter: (value) =>
-                value ? "Active" : "Inactive",
+            valueGetter: (params) =>
+                params ? "Active" : "Inactive",
+        },
+
+        {
+            field: "actions",
+            headerName: "Actions",
+            width: 150,
+            sortable: false,
+
+            renderCell: (params) => (
+
+                <>
+
+                    <IconButton
+                        color="primary"
+                        onClick={() => handleEdit(params.row)}
+                    >
+                        <EditIcon />
+                    </IconButton>
+
+                    <IconButton
+                        color="error"
+                        onClick={() => handleDeleteClick(params.row)}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+
+                </>
+
+            ),
+
         },
 
     ];
 
     return (
 
-        <div>
+        <>
 
             <Box
                 display="flex"
@@ -114,45 +255,116 @@ function ProductPage() {
                 mb={2}
             >
 
-                <Typography variant="h4">
-
+                <Typography
+                    variant="h4"
+                >
                     Product Management
-
                 </Typography>
 
                 <Button
                     variant="contained"
-                    onClick={() => setOpenDialog(true)}
+                    onClick={handleAdd}
                 >
                     Add Product
                 </Button>
 
             </Box>
 
-            <Paper sx={{ height: 500 }}>
+            <Paper sx={{ height: 600 }}>
 
                 <DataGrid
                     rows={products}
                     columns={columns}
-                    pageSizeOptions={[5, 10]}
+                    pageSizeOptions={[5,10,20]}
                     initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
+                        pagination:{
+                            paginationModel:{
+                                pageSize:10,
                             },
                         },
                     }}
+                    disableRowSelectionOnClick
                 />
 
             </Paper>
 
             <ProductDialog
-                open={openDialog}
-                onClose={() => setOpenDialog(false)}
-                onSave={handleSave}
-            />
 
-        </div>
+                open={openDialog}
+
+                onClose={() => {
+
+                    setOpenDialog(false);
+
+                    setSelectedProduct(null);
+
+                }}
+
+                onSave={handleSave}
+
+                product={selectedProduct}
+
+            />
+            <Dialog
+                open={deleteDialog}
+                onClose={() => setDeleteDialog(false)}
+            >
+
+                <DialogTitle>
+
+                    Delete Product
+
+                </DialogTitle>
+
+                <DialogContent>
+
+                    <DialogContentText>
+
+                        Are you sure you want to delete this product?
+
+                    </DialogContentText>
+
+                </DialogContent>
+
+                <DialogActions>
+
+                    <Button
+                        onClick={() => setDeleteDialog(false)}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={confirmDelete}
+                    >
+                        Delete
+                    </Button>
+
+                </DialogActions>
+
+            </Dialog>
+
+            <Snackbar
+                open={success}
+                autoHideDuration={3000}
+                onClose={() => setSuccess(false)}
+            >
+
+                <Alert
+                    severity="success"
+                    variant="filled"
+                    onClose={() => setSuccess(false)}
+                >
+
+                    {message}
+
+                </Alert>
+
+            </Snackbar>
+
+        </>
 
     );
 
