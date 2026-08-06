@@ -22,12 +22,8 @@ function LoginPage() {
 
         try {
 
-            const response = await login(username, password);
+            await login(username, password);
 
-            console.log(response);
-
-            // Save JWT Token
-            localStorage.setItem("token", response.token);
 
             // Save Username
             localStorage.setItem("username", username);
