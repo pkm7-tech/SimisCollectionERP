@@ -2,6 +2,7 @@ package com.simiscollection.erp.inventory.entity;
 
 import com.simiscollection.erp.product.entity.Product;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "inventory")
@@ -17,6 +18,10 @@ public class Inventory {
 
     @Column(nullable = false)
     private Integer quantity;
+    
+
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal averagePurchasePrice = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private Integer reorderLevel;
@@ -50,5 +55,13 @@ public class Inventory {
 
     public void setReorderLevel(Integer reorderLevel) {
         this.reorderLevel = reorderLevel;
+    }
+
+    public BigDecimal getAveragePurchasePrice() {
+        return averagePurchasePrice;
+    }
+
+    public void setAveragePurchasePrice(BigDecimal averagePurchasePrice) {
+        this.averagePurchasePrice = averagePurchasePrice;
     }
 }

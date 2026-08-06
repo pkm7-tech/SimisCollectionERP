@@ -83,8 +83,36 @@ public class PurchaseServiceImpl implements PurchaseService {
                             new InventoryNotFoundException(
                                     "Inventory not found for product id " + product.getId()));
 
-            inventory.setQuantity(
-                    inventory.getQuantity() + itemRequest.getQuantity());
+            int oldQuantity = inventory.getQuantity();
+
+            BigDecimal oldAveragePrice = inventory.getAveragePurchasePrice();
+
+            int purchasedQuantity = itemRequest.getQuantity();
+
+            BigDecimal purchasePrice = itemRequest.getUnitPrice();
+
+            int newQuantity = oldQuantity + purchasedQuantity;
+
+            BigDecimal totalOldCost =
+                    oldAveragePrice.multiply(
+                            BigDecimal.valueOf(oldQuantity));
+
+            BigDecimal totalNewCost =
+                    purchasePrice.multiply(
+                            BigDecimal.valueOf(purchasedQuantity));
+
+            BigDecimal newAveragePrice =
+                    totalOldCost
+                            .add(totalNewCost)
+                            .divide(
+                                    BigDecimal.valueOf(newQuantity),
+                                    2,
+                                    java.math.RoundingMode.HALF_UP
+                            );
+
+            inventory.setQuantity(newQuantity);
+
+            inventory.setAveragePurchasePrice(newAveragePrice);
 
             inventoryRepository.save(inventory);
 

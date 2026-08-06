@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
 
             response.put(
                     "message",
-                    "Cannot delete product because it exists in inventory."
+                    "Cannot delete this record because it is referenced by other records"
             );
 
         }

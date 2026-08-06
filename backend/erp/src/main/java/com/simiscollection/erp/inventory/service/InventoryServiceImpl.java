@@ -11,6 +11,7 @@ import com.simiscollection.erp.product.entity.Product;
 import com.simiscollection.erp.product.exception.ProductNotFoundException;
 import com.simiscollection.erp.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import com.simiscollection.erp.inventory.dto.ProductStockResponse;
 
 import java.util.List;
 
@@ -104,5 +105,24 @@ public class InventoryServiceImpl implements InventoryService {
                         ));
 
         inventoryRepository.delete(inventory);
+    }
+
+    @Override
+    public List<ProductStockResponse> getProductsWithStock() {
+
+        return inventoryRepository.findAll()
+                .stream()
+                .map(inventory -> new ProductStockResponse(
+
+                        inventory.getProduct().getId(),
+
+                        inventory.getProduct().getName(),
+                        inventory.getAveragePurchasePrice(),
+
+                        inventory.getQuantity()
+
+                ))
+                .toList();
+
     }
 }

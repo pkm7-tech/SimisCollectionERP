@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.simiscollection.erp.inventory.dto.ProductStockResponse;
 
 import java.util.List;
 
@@ -59,5 +60,13 @@ public class InventoryController {
         inventoryService.deleteInventory(id);
 
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/products")
+    public ResponseEntity<List<ProductStockResponse>> getProductsWithStock() {
+
+        return ResponseEntity.ok(
+                inventoryService.getProductsWithStock()
+        );
+
     }
 }
