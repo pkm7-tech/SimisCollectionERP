@@ -59,8 +59,23 @@ public class GlobalExceptionHandler {
 
         response.put("status", HttpStatus.BAD_REQUEST.value());
 
-        response.put("message",
-                "Cannot delete product because it exists in inventory.");
+        String message = ex.getMessage();
+
+        if (message != null && message.contains("category")) {
+
+            response.put(
+                    "message",
+                    "Cannot delete category because it is assigned to one or more products."
+            );
+
+        } else {
+
+            response.put(
+                    "message",
+                    "Cannot delete product because it exists in inventory."
+            );
+
+        }
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

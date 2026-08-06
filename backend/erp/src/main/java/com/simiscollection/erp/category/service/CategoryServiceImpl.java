@@ -7,6 +7,7 @@ import com.simiscollection.erp.category.exception.CategoryNotFoundException;
 import com.simiscollection.erp.category.mapper.CategoryMapper;
 import com.simiscollection.erp.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryMapper.toResponse(updatedCategory);
     }
 
+
     @Override
     public void deleteCategory(Long id) {
 
@@ -76,6 +78,17 @@ public class CategoryServiceImpl implements CategoryService {
                                 "Category not found with id " + id
                         ));
 
-        categoryRepository.delete(category);
+        try {
+
+            categoryRepository.delete(category);
+
+        } catch (DataIntegrityViolationException ex) {
+
+            throw new DataIntegrityViolationException(
+                    "Cannot delete category because it is assigned to one or more products."
+            );
+
+        }
+
     }
 }
