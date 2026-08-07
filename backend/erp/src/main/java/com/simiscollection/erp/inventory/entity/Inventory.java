@@ -2,6 +2,7 @@ package com.simiscollection.erp.inventory.entity;
 
 import com.simiscollection.erp.product.entity.Product;
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -13,14 +14,21 @@ public class Inventory {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "product_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "product_id",
+            nullable = false,
+            unique = true
+    )
     private Product product;
 
     @Column(nullable = false)
     private Integer quantity;
-    
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(
+            nullable = false,
+            precision = 12,
+            scale = 2
+    )
     private BigDecimal averagePurchasePrice = BigDecimal.ZERO;
 
     @Column(nullable = false)
@@ -31,6 +39,10 @@ public class Inventory {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Product getProduct() {
@@ -49,19 +61,19 @@ public class Inventory {
         this.quantity = quantity;
     }
 
-    public Integer getReorderLevel() {
-        return reorderLevel;
-    }
-
-    public void setReorderLevel(Integer reorderLevel) {
-        this.reorderLevel = reorderLevel;
-    }
-
     public BigDecimal getAveragePurchasePrice() {
         return averagePurchasePrice;
     }
 
     public void setAveragePurchasePrice(BigDecimal averagePurchasePrice) {
         this.averagePurchasePrice = averagePurchasePrice;
+    }
+
+    public Integer getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(Integer reorderLevel) {
+        this.reorderLevel = reorderLevel;
     }
 }

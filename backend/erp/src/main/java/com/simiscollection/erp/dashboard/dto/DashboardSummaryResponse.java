@@ -1,5 +1,7 @@
 package com.simiscollection.erp.dashboard.dto;
 
+import java.math.BigDecimal;
+
 public class DashboardSummaryResponse {
 
     private long totalCategories;
@@ -76,5 +78,23 @@ public class DashboardSummaryResponse {
 
     public void setTotalInventoryQuantity(long totalInventoryQuantity) {
         this.totalInventoryQuantity = totalInventoryQuantity;
+    }
+    private BigDecimal totalRevenue;
+
+    private BigDecimal inventoryValue;
+    public BigDecimal getTotalRevenue() {
+        return totalRevenue;
+    }
+
+    public void setTotalRevenue(BigDecimal totalRevenue) {
+        this.totalRevenue = totalRevenue;
+    }
+
+    public BigDecimal getInventoryValue() {
+        return inventoryValue;
+    }
+
+    public void setInventoryValue(BigDecimal inventoryValue) {
+        this.inventoryValue = inventoryValue;
     }
 }

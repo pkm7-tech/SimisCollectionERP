@@ -7,9 +7,12 @@ import com.simiscollection.erp.inventory.entity.Inventory;
 import com.simiscollection.erp.inventory.repository.InventoryRepository;
 import com.simiscollection.erp.product.repository.ProductRepository;
 import com.simiscollection.erp.purchase.repository.PurchaseRepository;
+import com.simiscollection.erp.sale.entity.Sale;
 import com.simiscollection.erp.sale.repository.SaleRepository;
 import com.simiscollection.erp.supplier.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
@@ -53,6 +56,24 @@ public class DashboardServiceImpl implements DashboardService {
         response.setTotalSales(saleRepository.count());
 
         response.setInventoryItems(inventoryRepository.count());
+        BigDecimal totalRevenue = saleRepository.findAll()
+                .stream()
+                .map(Sale::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        response.setTotalRevenue(totalRevenue);
+
+        BigDecimal inventoryValue = inventoryRepository.findAll()
+                .stream()
+                .map(item ->
+                        item.getAveragePurchasePrice()
+                                .multiply(
+                                        BigDecimal.valueOf(item.getQuantity())
+                                )
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        response.setInventoryValue(inventoryValue);
 
         long totalQuantity = inventoryRepository.findAll()
                 .stream()
