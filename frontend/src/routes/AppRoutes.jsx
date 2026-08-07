@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginPage from "../pages/auth/LoginPage";
-
+import InventoryPage from "../pages/inventory/InventoryPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import CategoryPage from "../pages/categories/CategoryPage";
 import ProductPage from "../pages/products/ProductPage";
@@ -43,6 +43,10 @@ function AppRoutes() {
                     <Route path="/purchases" element={<PurchasePage />} />
                     <Route path="/sales" element={<SalePage />} />
                     <Route path="/users" element={<UserPage />} />
+                    <Route
+                        path="/inventory"
+                        element={<InventoryPage />}
+                    />
 
                 </Route>
 

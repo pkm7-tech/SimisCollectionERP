@@ -13,6 +13,7 @@ import {
     Typography,
 } from "@mui/material";
 
+
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -21,6 +22,9 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 const drawerWidth = 250;
 
@@ -30,12 +34,20 @@ function MainLayout() {
     const menuItems = [
         { text: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
         { text: "Categories", path: "/categories", icon: <CategoryIcon /> },
-        { text: "Products", path: "/products", icon: <InventoryIcon /> },
+        { text: "Products", path: "/products", icon: <AutoAwesomeIcon /> },
         { text: "Customers", path: "/customers", icon: <PeopleIcon /> },
         { text: "Suppliers", path: "/suppliers", icon: <LocalShippingIcon /> },
         { text: "Purchases", path: "/purchases", icon: <ShoppingCartIcon /> },
         { text: "Sales", path: "/sales", icon: <PointOfSaleIcon /> },
-        { text: "Users", path: "/users", icon: <PeopleIcon /> },
+
+        {
+            text: "Inventory",
+            path: "/inventory",
+            icon: <Inventory2OutlinedIcon />,
+        },
+
+        { text: "Users", path: "/users", icon: <ManageAccountsIcon /> },
+
         { text: "Logout", path: "/logout", icon: <LogoutIcon /> },
     ];
 
