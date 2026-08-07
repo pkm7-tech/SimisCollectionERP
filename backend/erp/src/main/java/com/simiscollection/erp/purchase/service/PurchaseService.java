@@ -2,7 +2,7 @@ package com.simiscollection.erp.purchase.service;
 
 import com.simiscollection.erp.purchase.dto.PurchaseResponse;
 import com.simiscollection.erp.purchase.dto.PurchaseRequest;
-
+import com.simiscollection.erp.purchase.dto.PurchaseSummaryDTO;
 import java.util.List;
 
 public interface PurchaseService {
@@ -14,4 +14,5 @@ public interface PurchaseService {
     PurchaseResponse getPurchaseById(Long id);
 
     void deletePurchase(Long id);
+    List<PurchaseSummaryDTO> getPurchaseSummary();
 }

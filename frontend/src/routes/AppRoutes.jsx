@@ -10,7 +10,8 @@ import SupplierPage from "../pages/suppliers/SupplierPage";
 import PurchasePage from "../pages/purchases/PurchasePage";
 import SalePage from "../pages/sales/SalePage";
 import UserPage from "../pages/users/UserPage";
-
+import PurchaseHistoryPage from "../pages/purchases/PurchaseHistoryPage";
+import SalesHistoryPage from "../pages/sales/SalesHistoryPage";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
 
@@ -41,7 +42,15 @@ function AppRoutes() {
                     <Route path="/customers" element={<CustomerPage />} />
                     <Route path="/suppliers" element={<SupplierPage />} />
                     <Route path="/purchases" element={<PurchasePage />} />
+                    <Route
+                        path="/purchase-history"
+                        element={<PurchaseHistoryPage />}
+                    />
                     <Route path="/sales" element={<SalePage />} />
+                    <Route
+                        path="/sales-history"
+                        element={<SalesHistoryPage />}
+                    />
                     <Route path="/users" element={<UserPage />} />
                     <Route
                         path="/inventory"

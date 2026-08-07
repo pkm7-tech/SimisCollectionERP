@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.simiscollection.erp.purchase.dto.PurchaseSummaryDTO;
 
 import java.util.List;
 
@@ -50,5 +51,13 @@ public class PurchaseController {
         purchaseService.deletePurchase(id);
 
         return ResponseEntity.ok("Purchase deleted successfully.");
+    }
+    @GetMapping("/history")
+    public ResponseEntity<List<PurchaseSummaryDTO>> getPurchaseHistory() {
+
+        return ResponseEntity.ok(
+                purchaseService.getPurchaseSummary()
+        );
+
     }
 }

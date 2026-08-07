@@ -25,6 +25,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import ReceiptLongIcon
+    from "@mui/icons-material/ReceiptLong";
 
 const drawerWidth = 250;
 
@@ -38,7 +40,17 @@ function MainLayout() {
         { text: "Customers", path: "/customers", icon: <PeopleIcon /> },
         { text: "Suppliers", path: "/suppliers", icon: <LocalShippingIcon /> },
         { text: "Purchases", path: "/purchases", icon: <ShoppingCartIcon /> },
+        {
+            text: "Purchase History",
+            path: "/purchase-history",
+            icon: <ReceiptLongIcon />,
+        },
         { text: "Sales", path: "/sales", icon: <PointOfSaleIcon /> },
+        {
+            text: "Sales History",
+            path: "/sales-history",
+            icon: <ReceiptLongIcon />,
+        },
 
         {
             text: "Inventory",

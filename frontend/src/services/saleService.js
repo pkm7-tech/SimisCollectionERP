@@ -21,3 +21,19 @@ export const deleteSale = async (id) => {
     await api.delete(`/sales/${id}`);
 
 };
+
+export const getSaleHistory = async () => {
+
+    const response = await api.get("/sales/history");
+
+    return response.data;
+
+};
+
+export const getSaleById = async (id) => {
+
+    const response = await api.get(`/sales/${id}`);
+
+    return response.data;
+
+};

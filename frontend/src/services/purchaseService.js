@@ -18,3 +18,10 @@ export const getPurchaseById = async (id) => {
 export const deletePurchase = async (id) => {
     await api.delete(`/purchases/${id}`);
 };
+export const getPurchaseHistory = async () => {
+
+    const response = await api.get("/purchases/history");
+
+    return response.data;
+
+};

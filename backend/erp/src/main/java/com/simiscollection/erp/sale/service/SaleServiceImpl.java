@@ -17,7 +17,7 @@ import com.simiscollection.erp.sale.mapper.SaleMapper;
 import com.simiscollection.erp.sale.repository.SaleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
+import com.simiscollection.erp.sale.dto.SaleSummaryDTO;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -101,6 +101,13 @@ public class SaleServiceImpl implements SaleService {
                 .stream()
                 .map(SaleMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public List<SaleSummaryDTO> getSaleSummary() {
+
+        return saleRepository.getSaleSummary();
+
     }
 
     @Override

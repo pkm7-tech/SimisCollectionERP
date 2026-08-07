@@ -2,6 +2,7 @@ package com.simiscollection.erp.sale.controller;
 
 import com.simiscollection.erp.sale.dto.SaleRequest;
 import com.simiscollection.erp.sale.dto.SaleResponse;
+import com.simiscollection.erp.sale.dto.SaleSummaryDTO;
 import com.simiscollection.erp.sale.service.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,11 @@ public class SaleController {
     @GetMapping
     public List<SaleResponse> getAllSales() {
         return saleService.getAllSales();
+    }
+
+    @GetMapping("/history")
+    public List<SaleSummaryDTO> getSaleHistory() {
+        return saleService.getSaleSummary();
     }
 
     @GetMapping("/{id}")

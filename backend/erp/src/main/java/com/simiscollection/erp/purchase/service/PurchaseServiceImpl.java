@@ -19,7 +19,7 @@ import com.simiscollection.erp.supplier.exception.SupplierNotFoundException;
 import com.simiscollection.erp.supplier.repository.SupplierRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
+import com.simiscollection.erp.purchase.dto.PurchaseSummaryDTO;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -155,5 +155,12 @@ public class PurchaseServiceImpl implements PurchaseService {
                                 "Purchase not found with id " + id));
 
         purchaseRepository.delete(purchase);
+    }
+
+    @Override
+    public List<PurchaseSummaryDTO> getPurchaseSummary() {
+
+        return purchaseRepository.getPurchaseSummary();
+
     }
 }
