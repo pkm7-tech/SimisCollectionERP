@@ -1,11 +1,14 @@
 package com.simiscollection.erp.dashboard.controller;
 
 import com.simiscollection.erp.dashboard.dto.DashboardSummaryResponse;
+import com.simiscollection.erp.dashboard.dto.MonthlyChartDTO;
 import com.simiscollection.erp.dashboard.service.DashboardService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -20,6 +23,22 @@ public class DashboardController {
 
     @GetMapping("/summary")
     public DashboardSummaryResponse getDashboardSummary() {
+
         return dashboardService.getDashboardSummary();
+
+    }
+
+    @GetMapping("/monthly-sales")
+    public List<MonthlyChartDTO> getMonthlySales() {
+
+        return dashboardService.getMonthlySales();
+
+    }
+
+    @GetMapping("/monthly-purchases")
+    public List<MonthlyChartDTO> getMonthlyPurchases() {
+
+        return dashboardService.getMonthlyPurchases();
+
     }
 }

@@ -15,7 +15,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
             p.invoiceNumber,
             p.purchaseDate,
             p.supplier.companyName,
-            COALESCE(SUM(pi.quantity), 0),
+            SUM(pi.quantity),
             p.totalAmount
         )
         FROM Purchase p
@@ -32,4 +32,18 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
         """)
     List<PurchaseSummaryDTO> getPurchaseSummary();
 
+    @Query("""
+        SELECT
+            YEAR(p.purchaseDate),
+            MONTH(p.purchaseDate),
+            SUM(p.totalAmount)
+        FROM Purchase p
+        GROUP BY
+            YEAR(p.purchaseDate),
+            MONTH(p.purchaseDate)
+        ORDER BY
+            YEAR(p.purchaseDate),
+            MONTH(p.purchaseDate)
+        """)
+    List<Object[]> getMonthlyPurchases();
 }

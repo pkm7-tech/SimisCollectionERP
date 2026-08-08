@@ -3,6 +3,7 @@ package com.simiscollection.erp.dashboard.service;
 import com.simiscollection.erp.category.repository.CategoryRepository;
 import com.simiscollection.erp.customer.repository.CustomerRepository;
 import com.simiscollection.erp.dashboard.dto.DashboardSummaryResponse;
+import com.simiscollection.erp.dashboard.dto.MonthlyChartDTO;
 import com.simiscollection.erp.inventory.entity.Inventory;
 import com.simiscollection.erp.inventory.repository.InventoryRepository;
 import com.simiscollection.erp.product.repository.ProductRepository;
@@ -13,6 +14,8 @@ import com.simiscollection.erp.supplier.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
@@ -46,20 +49,44 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public DashboardSummaryResponse getDashboardSummary() {
 
-        DashboardSummaryResponse response = new DashboardSummaryResponse();
+        DashboardSummaryResponse response =
+                new DashboardSummaryResponse();
 
-        response.setTotalCategories(categoryRepository.count());
-        response.setTotalProducts(productRepository.count());
-        response.setTotalCustomers(customerRepository.count());
-        response.setTotalSuppliers(supplierRepository.count());
-        response.setTotalPurchases(purchaseRepository.count());
-        response.setTotalSales(saleRepository.count());
+        response.setTotalCategories(
+                categoryRepository.count()
+        );
 
-        response.setInventoryItems(inventoryRepository.count());
+        response.setTotalProducts(
+                productRepository.count()
+        );
+
+        response.setTotalCustomers(
+                customerRepository.count()
+        );
+
+        response.setTotalSuppliers(
+                supplierRepository.count()
+        );
+
+        response.setTotalPurchases(
+                purchaseRepository.count()
+        );
+
+        response.setTotalSales(
+                saleRepository.count()
+        );
+
+        response.setInventoryItems(
+                inventoryRepository.count()
+        );
+
         BigDecimal totalRevenue = saleRepository.findAll()
                 .stream()
                 .map(Sale::getTotalAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(
+                        BigDecimal.ZERO,
+                        BigDecimal::add
+                );
 
         response.setTotalRevenue(totalRevenue);
 
@@ -68,10 +95,15 @@ public class DashboardServiceImpl implements DashboardService {
                 .map(item ->
                         item.getAveragePurchasePrice()
                                 .multiply(
-                                        BigDecimal.valueOf(item.getQuantity())
+                                        BigDecimal.valueOf(
+                                                item.getQuantity()
+                                        )
                                 )
                 )
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(
+                        BigDecimal.ZERO,
+                        BigDecimal::add
+                );
 
         response.setInventoryValue(inventoryValue);
 
@@ -83,5 +115,49 @@ public class DashboardServiceImpl implements DashboardService {
         response.setTotalInventoryQuantity(totalQuantity);
 
         return response;
+    }
+
+    @Override
+    public List<MonthlyChartDTO> getMonthlySales() {
+
+        return saleRepository.getMonthlySales()
+                .stream()
+                .map(row -> {
+
+                    Integer year = ((Number) row[0]).intValue();
+                    Integer month = ((Number) row[1]).intValue();
+                    BigDecimal amount = (BigDecimal) row[2];
+
+                    String monthLabel =
+                            String.format("%04d-%02d", year, month);
+
+                    return new MonthlyChartDTO(
+                            monthLabel,
+                            amount
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MonthlyChartDTO> getMonthlyPurchases() {
+
+        return purchaseRepository.getMonthlyPurchases()
+                .stream()
+                .map(row -> {
+
+                    Integer year = ((Number) row[0]).intValue();
+                    Integer month = ((Number) row[1]).intValue();
+                    BigDecimal amount = (BigDecimal) row[2];
+
+                    String monthLabel =
+                            String.format("%04d-%02d", year, month);
+
+                    return new MonthlyChartDTO(
+                            monthLabel,
+                            amount
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
